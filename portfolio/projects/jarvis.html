@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jarvis, a personal AI assistant — Ethan</title>
+  <meta name="description" content="Case study: a Discord AI assistant built in n8n with five specialist agents for email, calendar, tasks, contacts and expenses.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="../index.html">ETHAN<span>.</span></a>
+  <ul>
+    <li><a href="../index.html#work">Work</a></li>
+    <li><a href="../index.html#experience">Experience</a></li>
+    <li><a href="../index.html#tools">Tools</a></li>
+    <li><a href="../index.html#about">About</a></li>
+  </ul>
+  <a class="pill" href="../index.html#contact">Contact</a>
+</nav>
+
+<header class="case-hero">
+  <div class="wrap">
+    <span class="label">AI automation · Case study</span>
+    <h1>Jarvis, <span class="light">a personal AI assistant</span></h1>
+    <p class="lede">A Discord assistant built in n8n that manages my email, calendar, tasks, contacts and expenses. I talk to it in plain language, by text or by voice message.</p>
+    <div class="facts">
+      <div class="fact"><span class="label">Role</span><b>Solo build</b></div>
+      <div class="fact"><span class="label">Interface</span><b>Discord (text + voice)</b></div>
+      <div class="fact"><span class="label">Built with</span><b>n8n, Gemini, ElevenLabs</b></div>
+      <div class="fact"><span class="label">Status</span><b class="status">Working build</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap doc">
+  <aside class="toc">
+    <a href="#problem">Problem</a>
+    <a href="#approach">Approach</a>
+    <a href="#build">How it works</a>
+    <a href="#safety">Safety choices</a>
+    <a href="#result">What it does</a>
+    <a href="#next">What I'd improve</a>
+  </aside>
+
+  <article class="prose">
+    <h2 id="problem">The problem</h2>
+    <p>My email, calendar, to-do list, contacts and spending all live in different apps, and getting simple things done means jumping between them. I wanted one place I could just message, like texting a person, and have things happen. It started as a calendar-only assistant, and I kept adding specialists until it covered the rest.</p>
+
+    <h2 id="approach">My approach</h2>
+    <p>Instead of one giant assistant that knows how to do everything, I built a small team. A main agent, Jarvis, chats with me and decides who should handle each request. Behind it are five specialists, and each one can only use its own tools.</p>
+    <ul>
+      <li><b>Email</b> reads, searches, drafts, replies and labels in Gmail.</li>
+      <li><b>Calendar</b> checks availability and creates, moves and deletes events.</li>
+      <li><b>Tasks</b> creates, completes and deletes to-dos in Google Tasks.</li>
+      <li><b>Contacts</b> looks up verified email addresses and phone numbers.</li>
+      <li><b>Finance</b> logs and reports expenses in a Google Sheet.</li>
+    </ul>
+    <p>Splitting the work this way keeps each agent's instructions short and focused, and it limits what any one agent can touch.</p>
+
+    <h2 id="build">How it works</h2>
+    <p>Every message goes through the same path, whether I type it or speak it.</p>
+    <div class="flow">
+      <div class="row"><div class="node"><small>1 · Trigger</small>I send a message in Discord</div></div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node"><small>2 · Gate</small>Only my own Discord account is allowed through</div></div>
+      <div class="arrow">↓</div>
+      <div class="row">
+        <div class="node"><small>3a · Text</small>Goes straight to Jarvis</div>
+        <div class="node"><small>3b · Voice</small>Downloaded and transcribed to text first</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node core"><small>4 · Jarvis</small>Gemini model with conversation memory. Decides what I need and delegates.</div></div>
+      <div class="arrow">↓</div>
+      <div class="row five">
+        <div class="node"><small>Specialist</small>Email</div>
+        <div class="node"><small>Specialist</small>Calendar</div>
+        <div class="node"><small>Specialist</small>Tasks</div>
+        <div class="node"><small>Specialist</small>Contacts</div>
+        <div class="node"><small>Specialist</small>Finance</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="row">
+        <div class="node"><small>5a · Reply</small>Sent back as text in Discord</div>
+        <div class="node"><small>5b · Voice reply</small>If I spoke, the answer is converted to speech</div>
+      </div>
+    </div>
+    <figure class="shot">
+      <img src="../images/jarvis-workflow.webp" width="1600" height="981" loading="lazy" alt="The Jarvis workflow canvas in n8n with the main agent and its five specialist groups">
+      <figcaption>The Jarvis workflow in n8n.</figcaption>
+    </figure>
+
+    <h2 id="safety">Safety choices</h2>
+    <p>Because this assistant can send email and delete things, I treated it like a security project as well as an automation one.</p>
+    <ul>
+      <li><b>Locked to me.</b> A filter drops any message that doesn't come from my own Discord account.</li>
+      <li><b>Least privilege.</b> Each specialist only has the tools for its own job. The Email agent can't touch my calendar, and so on.</li>
+      <li><b>Confirm before anything irreversible.</b> It must show me the recipient, subject and message before sending an email, and ask before deleting an event, task or expense.</li>
+      <li><b>Verify recipients.</b> It looks up addresses in Contacts rather than guessing them.</li>
+      <li><b>No made-up results.</b> It's told never to claim something worked unless the tool confirmed it, and to say plainly when a step fails.</li>
+      <li><b>A separate calendar.</b> Events are created on a dedicated "AI" calendar, not my main one.</li>
+      <li><b>Correct dates.</b> n8n injects the current Melbourne date and time into every prompt, so "tomorrow" or "next Friday" is calculated from a real clock and not from the model's memory.</li>
+    </ul>
+
+    <h2 id="result">What it does</h2>
+    <div class="result">
+      <div class="big">5 agents · 22 tools</div>
+      <p>Ask "what's on my calendar tomorrow?", "log $18 for lunch", "remind me to submit the form on Friday", or "draft a reply to the last email from my lecturer", and it handles it, in text or by voice.</p>
+    </div>
+
+    <h2 id="next">What I'd improve</h2>
+    <p>Being honest about the limits is part of the project, and several of these come from my cybersecurity side.</p>
+    <ul>
+      <li><b>Enforce confirmations, don't just request them.</b> Right now "ask before sending or deleting" is an instruction in the prompt. A model could ignore it, so I'd add a real approval step in n8n that blocks the action until I click confirm.</li>
+      <li><b>Defend against prompt injection.</b> The assistant reads emails, and an email could contain hidden instructions. I'd treat email content as untrusted data and limit what actions it can trigger.</li>
+      <li><b>Safer deletes.</b> Expense deletion works by row number, which could remove the wrong row if the sheet changes. Matching on a unique ID would be safer.</li>
+      <li><b>Persistent memory and logging.</b> Memory is a simple in-session buffer, so I'd move it to a database and add an audit log of every action the assistant takes.</li>
+    </ul>
+  </article>
+</div>
+
+<div class="wrap next">
+  <a class="btn ghost" href="../index.html#work">← All projects</a>
+  <a class="btn solid" href="../index.html#contact">Get in touch</a>
+</div>
+
+<footer>
+  <div class="wrap"><span>© 2026 Ethan</span></div>
+</footer>
+</body>
+</html>
