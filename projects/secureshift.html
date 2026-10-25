@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SecureShift frontend and UX work — Ethan</title>
+  <meta name="description" content="Case study: frontend and UX work on SecureShift's admin panel, employer panel and guard app.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="../index.html">ETHAN<span>.</span></a>
+  <ul>
+    <li><a href="../index.html#work">Work</a></li>
+    <li><a href="../index.html#experience">Experience</a></li>
+    <li><a href="../index.html#tools">Tools</a></li>
+    <li><a href="../index.html#about">About</a></li>
+  </ul>
+  <a class="pill" href="../index.html#contact">Contact</a>
+</nav>
+
+<header class="case-hero">
+  <div class="wrap">
+    <span class="label">Frontend &amp; UX · Case study</span>
+    <h1>SecureShift, <span class="light">frontend &amp; UX work</span></h1>
+    <p class="lede">Frontend and design work on a real multi-platform product (an employer panel, a guard mobile app and an admin panel), done as part of a team with mentors.</p>
+    <div class="facts">
+      <div class="fact"><span class="label">Role</span><b>Frontend Developer, UI/UX</b></div>
+      <div class="fact"><span class="label">Period</span><b>Nov 2025 – Jan 2026, Jul – Oct 2026</b></div>
+      <div class="fact"><span class="label">Worked with</span><b>MongoDB, Figma, Docker, Git/GitHub</b></div>
+      <div class="fact"><span class="label">Delivered</span><b>6 admin features + redesigns</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap doc">
+  <aside class="toc">
+    <a href="#admin">Admin panel</a>
+    <a href="#decision">A design decision</a>
+    <a href="#earlier">Employer panel &amp; guard app</a>
+    <a href="#team">How I worked</a>
+  </aside>
+
+  <article class="prose">
+    <h2 id="admin">The admin panel</h2>
+    <p>The admin panel gives platform admins visibility and control over shifts, messages and users. I delivered six features, each scoped as a ticket and shipped through a reviewed pull request.</p>
+    <ul>
+      <li><b>Analytics dashboard.</b> Interactive charts that turn platform data into visual insight for admins.</li>
+      <li><b>Global search bar.</b> Admins can find users, guards and shifts in one place, and results link straight to the right record.</li>
+      <li><b>Shift oversight table.</b> Search and status filters for tracking shifts.</li>
+      <li><b>Message moderation view.</b> Server-paginated, with multi-parameter filters and a confirmation step before secure deletion.</li>
+      <li><b>Session auto-logout.</b> Inactive admins are signed out automatically.</li>
+      <li><b>Docker.</b> I containerised the admin panel for consistent builds and deployment.</li>
+    </ul>
+    <figure class="shot">
+      <img src="../images/secureshift-admin.webp" width="1600" height="1211" loading="lazy" alt="Admin dashboard with analytics charts, shift and user totals">
+      <figcaption>Admin dashboard. Shown with sample data.</figcaption>
+    </figure>
+
+    <h2 id="decision">A design decision</h2>
+    <p>For the global search, there was no search endpoint available on the backend. Rather than wait, I chose a client-side search over the data the app already had, and linked each result directly to its record. It delivered the feature without blocking on another team.</p>
+
+    <h2 id="earlier">Employer panel &amp; guard app</h2>
+    <p>Before the admin panel, I worked on the employer panel and the guard mobile app as a UI/UX designer and frontend developer.</p>
+    <ul>
+      <li><b>Create Shift.</b> Redesigned it into a streamlined modal with an integrated calendar view.</li>
+      <li><b>Shift creation on mobile.</b> Extended shift creation to mobile, adapting the design for the guard app for a seamless, consistent experience across platforms.</li>
+      <li><b>Login and sign-up.</b> Removed unnecessary navigation and refined the layout for a cleaner, more intuitive flow.</li>
+      <li><b>Shift Details modal.</b> Built from the ground up, handling responsive styling and clear formatting of dates, times and pay to improve clarity for end users, and created the same for the mobile version.</li>
+      <li><b>Incident reporting.</b> Designed and delivered the workflow that lets employers review guard-submitted reports (photos, descriptions, shift details) and decide faster.</li>
+      <li><b>Database.</b> Worked with MongoDB, the database behind SecureShift.</li>
+    </ul>
+    <div class="shots">
+      <figure class="shot">
+        <img src="../images/secureshift-employer.webp" width="1600" height="1000" loading="lazy" alt="Employer panel showing a guard-submitted incident report for review">
+        <figcaption>Employer panel: incident review. Shown with sample data.</figcaption>
+      </figure>
+      <figure class="shot phone">
+        <img src="../images/secureshift-guard.webp" width="780" height="1688" loading="lazy" alt="Guard mobile app home screen with today's shift and earnings">
+        <figcaption>Guard app home screen. Shown with sample data.</figcaption>
+      </figure>
+    </div>
+
+    <h2 id="team">How I worked</h2>
+    <p>The work ran like a real engineering team: ticketed tasks, pull-request reviews, regular mentor check-ins and weekly meetings. I tracked work in Planner, kept leads updated in Teams, incorporated feedback into my designs, and resolved a merge conflict on my own.</p>
+  </article>
+</div>
+
+<div class="wrap next">
+  <a class="btn ghost" href="../index.html#work">← All projects</a>
+  <a class="btn solid" href="../index.html#contact">Get in touch</a>
+</div>
+
+<footer>
+  <div class="wrap"><span>© 2026 Ethan</span></div>
+</footer>
+</body>
+</html>

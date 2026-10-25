@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Automated data analysis pipeline — Ethan</title>
+  <meta name="description" content="Case study: an n8n workflow that turns an uploaded CSV into a cleaned dataset, an AI-written report and an interactive dashboard.">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a class="logo" href="../index.html">ETHAN<span>.</span></a>
+  <ul>
+    <li><a href="../index.html#work">Work</a></li>
+    <li><a href="../index.html#experience">Experience</a></li>
+    <li><a href="../index.html#tools">Tools</a></li>
+    <li><a href="../index.html#about">About</a></li>
+  </ul>
+  <a class="pill" href="../index.html#contact">Contact</a>
+</nav>
+
+<header class="case-hero">
+  <div class="wrap">
+    <span class="label">n8n · Data · Case study</span>
+    <h1>Automated data <span class="light">analysis pipeline</span></h1>
+    <p class="lede">An n8n workflow where you upload a CSV and get back a cleaned dataset, an AI-written analysis report and an interactive dashboard with charts.</p>
+    <div class="facts">
+      <div class="fact"><span class="label">Role</span><b>Solo build</b></div>
+      <div class="fact"><span class="label">Built with</span><b>n8n, JavaScript</b></div>
+      <div class="fact"><span class="label">AI &amp; charts</span><b>Gemini, Chart.js</b></div>
+      <div class="fact"><span class="label">Output</span><b>Data, report, dashboard</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap doc">
+  <aside class="toc">
+    <a href="#problem">Problem</a>
+    <a href="#build">How it works</a>
+    <a href="#decisions">Key decisions</a>
+    <a href="#result">What you get</a>
+    <a href="#next">What I'd improve</a>
+  </aside>
+
+  <article class="prose">
+    <h2 id="problem">The problem</h2>
+    <p>Turning a raw CSV into something people can read usually means cleaning it, working out the numbers and building charts by hand, every time. I wanted to see how much of that I could automate in one workflow, and how to keep the AI part honest.</p>
+
+    <h2 id="build">How it works</h2>
+    <p>A user uploads a CSV through a form, and the workflow does the rest.</p>
+    <div class="flow">
+      <div class="row"><div class="node"><small>1 · Upload</small>A CSV is uploaded through an n8n form</div></div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node"><small>2 · Clean</small>JavaScript steps remove duplicates, drop mostly-empty columns, standardise values, remove corrupted entries and fill gaps. Every change is logged.</div></div>
+      <div class="arrow">↓</div>
+      <div class="row">
+        <div class="node"><small>3a · Filter</small>Configurable row filters, outlier and date rules</div>
+        <div class="node"><small>3b · Export</small>The cleaned data is saved back out as a CSV</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node"><small>4 · Calculate</small>Statistics, a data quality score, distributions and correlations are computed in code</div></div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node"><small>5 · Classify</small>Each column is checked for whether it makes sense to chart or analyse</div></div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node core"><small>6 · Write</small>Gemini writes the analysis report from those real figures</div></div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node"><small>7 · Check</small>The report is validated in code before it is used</div></div>
+      <div class="arrow">↓</div>
+      <div class="row"><div class="node"><small>8 · Visualise</small>The report and a Chart.js dashboard are built and saved as files</div></div>
+    </div>
+    <figure class="shot">
+      <img src="../images/pipeline-workflow.webp" width="1600" height="650" loading="lazy" alt="The n8n workflow canvas for the data analysis pipeline">
+      <figcaption>The workflow in n8n.</figcaption>
+    </figure>
+
+    <h2 id="decisions">Key decisions</h2>
+    <ul>
+      <li><b>Numbers come from code, not the AI.</b> I calculate the statistics myself and hand the results to Gemini, so the report cites real figures from the whole dataset and not numbers the model guessed.</li>
+      <li><b>Not every column deserves a chart.</b> A classifier step blocks identifiers, names, emails, phone numbers and dates from being charted or correlated. The dashboard lists which columns were left out, and why.</li>
+      <li><b>Check the AI's output.</b> After Gemini writes the report, a code step removes any line that presents statistics for a column the classifier blocked.</li>
+      <li><b>Be open about the cleaning.</b> The dashboard shows what was removed and why, and labels filled-in values as estimates, not real observations.</li>
+    </ul>
+
+    <h2 id="result">What you get</h2>
+    <div class="result">
+      <div class="big">3 outputs</div>
+      <p>A cleaned CSV, an AI-written analysis report and an interactive dashboard, all from one upload. The examples below come from a sample customer dataset of 1,035 rows.</p>
+    </div>
+    <figure class="shot">
+      <img src="../images/pipeline-overview.webp" width="1363" height="1261" loading="lazy" alt="Dashboard overview with summary cards and a log of what the cleaning step changed">
+      <figcaption>Dashboard overview: summary cards and a log of every cleaning step.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="../images/pipeline-charts.webp" width="1368" height="1187" loading="lazy" alt="Dashboard charts for missing values, age, salary and state">
+      <figcaption>Charts, plus the columns that were deliberately left out.</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="../images/pipeline-report.webp" width="1300" height="1259" loading="lazy" alt="AI-written analyst report with findings and recommended actions">
+      <figcaption>The AI-written report, based on the calculated figures.</figcaption>
+    </figure>
+
+    <h2 id="next">What I'd improve</h2>
+    <p>The sample run shows where it still falls short.</p>
+    <ul>
+      <li><b>Outliers.</b> The salary column still has extreme values (up to 2.5 million and even a negative), which skews the mean. Outlier handling is configurable but I left it off for this run, and I'd turn on a sensible default.</li>
+      <li><b>Messy categories.</b> "ill." and "il" count as separate states. I'd add value standardisation for categorical columns.</li>
+      <li><b>Imputation.</b> Filling many gaps with the median keeps rows but inflates the quality score, which the report itself points out. I'd make that trade-off adjustable.</li>
+    </ul>
+  </article>
+</div>
+
+<div class="wrap next">
+  <a class="btn ghost" href="../index.html#work">← All projects</a>
+  <a class="btn solid" href="../index.html#contact">Get in touch</a>
+</div>
+
+<footer>
+  <div class="wrap"><span>© 2026 Ethan</span></div>
+</footer>
+</body>
+</html>
